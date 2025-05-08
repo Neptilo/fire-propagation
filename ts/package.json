@@ -1,0 +1,23 @@
+{
+  "name": "fire-propagation",
+  "version": "1.0.0",
+  "description": "A forest fire propagation simulated as a cell automaton",
+  "homepage": "https://github.com/Neptilo/fire-propagation#readme",
+  "bugs": {
+    "url": "https://github.com/Neptilo/fire-propagation/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neptilo/fire-propagation.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "typescript": "^5.8.3"
+  }
+}

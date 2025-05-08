@@ -1,3 +1,5 @@
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -14,7 +16,8 @@ public class Main extends Application {
 
         WebView webView = new WebView();
 
-        webView.getEngine().load("http://neptilo.com");
+        URL url = getClass().getResource("/index.html");
+        webView.getEngine().load(url.toExternalForm());
 
         VBox vBox = new VBox(webView);
         Scene scene = new Scene(vBox, 960, 600);

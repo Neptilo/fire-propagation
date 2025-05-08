@@ -1,0 +1,7 @@
+{
+    "files": ["main.ts"],
+    "compilerOptions": {
+        "outDir": "../out",
+        "lib": ["ES2021", "DOM"]
+    }
+}
