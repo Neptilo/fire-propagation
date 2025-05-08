@@ -1,0 +1,1 @@
+declare const Vue: typeof import('vue');

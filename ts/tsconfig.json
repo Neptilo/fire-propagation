@@ -1,7 +1,11 @@
 {
-    "files": ["main.ts"],
+    "include": ["*.ts"],
     "compilerOptions": {
-        "outDir": "../out",
-        "lib": ["ES2021", "DOM"]
+        "outFile": "../out/main.js",
+        "lib": ["ES2021", "DOM"],
+        "moduleResolution": "node",
+        "strict": true,
+        "target": "ES6",
+        "module": "None",
     }
 }
