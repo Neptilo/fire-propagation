@@ -5,7 +5,7 @@ tableElem.style.width = window.innerWidth - 2 * margin + 'px';
 tableElem.style.height = window.innerHeight - 2 * margin + 'px';
 
 // must match the definition in the backend, in the same order
-enum Tile { Tree, Fire, Dead };
+enum Tile { Tree, Fire, Ash };
 
 type VueData = {
     width: number;
@@ -28,14 +28,23 @@ const app = Vue.createApp({
                     return 'tree';
                 case Tile.Fire:
                     return 'fire';
-                case Tile.Dead:
-                    return 'dead';
+                case Tile.Ash:
+                    return 'ash';
             }
         }
     }
 });
 
 const vm = app.mount('#app') as VueInstance<VueData>;
+
+async function updateMap() {
+    const res = await fetch("/api/diff");
+    const diffData = await res.json();
+
+    // for now, diffData only contains the new fire tiles
+    for (let tile of diffData)
+        vm.map[tile[0]][tile[1]] = Tile.Fire;
+}
 
 // initialize data
 onload = async () => {
@@ -46,5 +55,8 @@ onload = async () => {
     vm.map = Array.from(
         { length: vm.height },
         () => Array(vm.width).fill(Tile.Tree));
-    vm.map[0][0] = Tile.Fire; // initilization test
+    updateMap();
+
+    // periodically update data
+    setInterval(updateMap, 200);
 }
