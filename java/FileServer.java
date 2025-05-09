@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.StringJoiner;
 
 public class FileServer {
@@ -58,11 +59,10 @@ public class FileServer {
         });
 
         server.createContext("/api/diff", exchange -> {
-            StringJoiner joiner = new StringJoiner(",", "[", "]");
-            for (IntPair tilePos : FireSimulator.popFireList()) {
-                joiner.add("[" + tilePos.x() + "," + tilePos.y() + "]");
-            }
-            String response = joiner.toString();
+            String response = "{" +
+                "\"fire\": " + stringifyIntPairList(FireSimulator.popFireList()) +
+                ",\"ash\": " + stringifyIntPairList(FireSimulator.popAshList()) +
+                "}";
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {
@@ -73,5 +73,13 @@ public class FileServer {
         server.setExecutor(null); // default executor
         server.start();
         System.out.println("Server running on http://localhost:" + port);
+    }
+
+    private static String stringifyIntPairList(LinkedList<IntPair> list) {
+        StringJoiner joiner = new StringJoiner(",", "[", "]");
+        for (IntPair tilePos : list) {
+            joiner.add("[" + tilePos.x() + "," + tilePos.y() + "]");
+        }
+        return joiner.toString();
     }
 }

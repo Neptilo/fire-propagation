@@ -40,10 +40,10 @@ const vm = app.mount('#app') as VueInstance<VueData>;
 async function updateMap() {
     const res = await fetch("/api/diff");
     const diffData = await res.json();
-
-    // for now, diffData only contains the new fire tiles
-    for (let tile of diffData)
+    for (let tile of diffData.fire)
         vm.map[tile[0]][tile[1]] = Tile.Fire;
+    for (let tile of diffData.ash)
+        vm.map[tile[0]][tile[1]] = Tile.Ash;
 }
 
 // initialize data
