@@ -10,8 +10,8 @@ import java.util.List;
 public class FireSimulator {
 
     // simulation parameters
-    private static int width = 20;
-    private static int height = 20;
+    private static int width = 200;
+    private static int height = 200;
     private static List<IntPair> propagationDirections = List.of(
             new IntPair(-1, 0),
             new IntPair(1, 0),
@@ -19,6 +19,7 @@ public class FireSimulator {
             new IntPair(0, 1));
     private static int startingPointNum = 3;
     private static double propagationFactor = 0.5;
+    private static int timeStepMs = 200;
 
     // simulation state variables
     private static ArrayList<ArrayList<TileState>> map;
@@ -83,7 +84,7 @@ public class FireSimulator {
         // periodically increase FileServer.counter every second
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(
-                () -> propagate(), 0, 1000, TimeUnit.MILLISECONDS);
+                () -> propagate(), 0, timeStepMs, TimeUnit.MILLISECONDS);
     }
 
     public static void propagate() {
