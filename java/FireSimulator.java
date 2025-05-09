@@ -1,5 +1,6 @@
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +17,7 @@ public class FireSimulator {
             new IntPair(1, 0),
             new IntPair(0, -1),
             new IntPair(0, 1));
+    private static int startingPointNum = 3;
 
     // simulation state variables
     private static ArrayList<ArrayList<TileState>> map;
@@ -37,8 +39,8 @@ public class FireSimulator {
         LinkedList<IntPair> res = firePendingList;
         firePendingList = new LinkedList<>();
         return res;
-    }  
-    
+    }
+
     public static LinkedList<IntPair> popAshList() {
         LinkedList<IntPair> res = ashPendingList;
         ashPendingList = new LinkedList<>();
@@ -54,10 +56,28 @@ public class FireSimulator {
         firePendingList = new LinkedList<>();
         ashPendingList = new LinkedList<>();
 
-        // start a fire
-        map.get(0).set(0, TileState.FIRE);
-        fireList.add(new IntPair(0, 0));
-        firePendingList.add(new IntPair(0, 0));
+        // start a fire:
+        // randomly choose starting positions until we reach the desired number
+        while (fireList.size() < startingPointNum) {
+            int startRow = ThreadLocalRandom.current().nextInt(height);
+            int startCol = ThreadLocalRandom.current().nextInt(width);
+
+            // check that this position hasn't been chosen yet
+            boolean alreadyChosen = false;
+            for (IntPair pos : fireList) {
+                if (pos.x() == startRow && pos.y() == startCol) {
+                    alreadyChosen = true;
+                    break;
+                }
+            }
+            if (alreadyChosen)
+                continue;
+
+            IntPair startPos = new IntPair(startRow, startCol);
+            map.get(startRow).set(startCol, TileState.FIRE);
+            fireList.add(startPos);
+            firePendingList.add(startPos);
+        }
 
         // periodically increase FileServer.counter every second
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
