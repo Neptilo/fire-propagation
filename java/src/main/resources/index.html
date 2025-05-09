@@ -8,13 +8,12 @@
 </head>
 
 <body>
-  <div id="app">
-    <table>
-      <tr>
-        <td>{{ counter }}</td>
-      </tr>
-    </table>
-  </div>
+  <table id="app">
+    <tr v-for="(row, rowIndex) in map" :key="rowIndex">
+      <td v-for="(tile, colIndex) in row" :key="colIndex" :class="getTileName(tile)">
+      </td>
+    </tr>
+  </table>
   <script src="https://unpkg.com/vue@3"></script>
   <script src="main.js"></script>
 </body>

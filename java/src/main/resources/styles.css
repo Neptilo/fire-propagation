@@ -1,3 +1,11 @@
-td {
+.tree {
     background-color: lightgreen;
+}
+
+.fire {
+    background-color: orange;
+}
+
+.dead {
+    background-color: gray;
 }

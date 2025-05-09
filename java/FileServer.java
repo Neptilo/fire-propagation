@@ -7,9 +7,6 @@ import java.nio.file.Path;
 
 public class FileServer {
 
-    // temporary variable, just for testing
-    public static int counter = 0;
-
     public static void start(int port, Path rootDir) throws IOException {
         HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
@@ -47,8 +44,11 @@ public class FileServer {
             }
         });
 
-        server.createContext("/api/data", exchange -> {
-            String response = String.valueOf(FileServer.counter);
+        server.createContext("/api/map-size", exchange -> {
+            String response = "{" +
+                "\"width\": " + FireSimulator.getWidth() +
+                ",\"height\": " + FireSimulator.getHeight() +
+            "}";
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, response.length());
             try (OutputStream os = exchange.getResponseBody()) {

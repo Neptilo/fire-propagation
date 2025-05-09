@@ -1,7 +1,4 @@
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.*;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -10,13 +7,9 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
     public static void main(String[] args) {
-        // periodically increase FileServer.counter every second
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        Runnable task = () -> {
-            FileServer.counter++;
-        };
-        scheduler.scheduleAtFixedRate(task, 0, 1, TimeUnit.SECONDS);
+        FireSimulator.start();
 
         launch(args);
     }
