@@ -18,6 +18,7 @@ public class FireSimulator {
             new IntPair(0, -1),
             new IntPair(0, 1));
     private static int startingPointNum = 3;
+    private static double propagationFactor = 0.5;
 
     // simulation state variables
     private static ArrayList<ArrayList<TileState>> map;
@@ -98,6 +99,10 @@ public class FireSimulator {
                 TileState state = map.get(row).get(col);
                 if (state != TileState.TREE)
                     continue;
+
+                // randomly decide if fire propagates to this tile
+                if (ThreadLocalRandom.current().nextDouble() > propagationFactor)
+                    continue; // That tree is safe for now.
 
                 newFireList.add(new IntPair(row, col));
                 map.get(row).set(col, TileState.FIRE);
