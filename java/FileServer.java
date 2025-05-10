@@ -48,10 +48,13 @@ public class FileServer {
             }
         });
 
+        FireSimulator simulator = FireSimulator.instance;
+        FireChangeCache cache = new FireChangeCache();
+
         server.createContext("/api/map-size", exchange -> {
             String response = "{" +
-                    "\"width\": " + FireSimulator.getWidth() +
-                    ",\"height\": " + FireSimulator.getHeight() +
+                    "\"width\": " + simulator.getWidth() +
+                    ",\"height\": " + simulator.getHeight() +
                     "}";
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, response.length());
@@ -59,12 +62,10 @@ public class FileServer {
                 os.write(response.getBytes());
             }
         });
-        
-        FireChangeCache cache = new FireChangeCache();
 
         server.createContext("/api/start", exchange -> {
-            FireSimulator.start();
-            FireSimulator.setObserver(cache);
+            simulator.start();
+            simulator.setObserver(cache);
         });
 
         server.createContext("/api/diff", exchange -> {

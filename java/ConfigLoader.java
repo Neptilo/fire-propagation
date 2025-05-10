@@ -4,7 +4,8 @@ import java.util.Properties;
 
 public class ConfigLoader {
     public static void load() {
-        try (InputStream input = FireSimulator.class.getResourceAsStream(
+        FireSimulator simulator = FireSimulator.instance;
+        try (InputStream input = simulator.getClass().getResourceAsStream(
                 "/config.properties")) {
             Properties props = new Properties();
             props.load(input);
@@ -15,7 +16,7 @@ public class ConfigLoader {
             if (propValueStr != null) {
                 int value = Integer.parseInt(propValueStr);
                 if (validateMinInt(propName, value, 1))
-                    FireSimulator.setWidth(value);
+                    simulator.setWidth(value);
             }
 
             propName = "height";
@@ -23,17 +24,17 @@ public class ConfigLoader {
             if (propValueStr != null) {
                 int value = Integer.parseInt(propValueStr);
                 if (validateMinInt(propName, value, 1))
-                    FireSimulator.setHeight(value);
+                    simulator.setHeight(value);
             }
 
             propName = "startingPointNum";
             propValueStr = props.getProperty(propName);
             if (propValueStr != null) {
                 int value = Integer.parseInt(propValueStr);
-                int numTiles = FireSimulator.getWidth() * FireSimulator.getHeight();
+                int numTiles = simulator.getWidth() * simulator.getHeight();
                 if (validateMinInt(propName, value, 1) &&
                         validateMaxInt(propName, value, numTiles))
-                    FireSimulator.setStartingPointNum(value);
+                    simulator.setStartingPointNum(value);
             }
 
             propName = "propagationFactor";
@@ -42,7 +43,7 @@ public class ConfigLoader {
                 double value = Double.parseDouble(propValueStr);
                 if (validateMinDouble(propName, value, 0) &&
                         validateMaxDouble(propName, value, 1))
-                    FireSimulator.setPropagationFactor(value);
+                    simulator.setPropagationFactor(value);
             }
 
             propName = "timeStepMs";
@@ -50,7 +51,7 @@ public class ConfigLoader {
             if (propValueStr != null) {
                 int value = Integer.parseInt(propValueStr);
                 if (validateMinInt(propName, value, 1))
-                    FireSimulator.setTimeStepMs(value);
+                    simulator.setTimeStepMs(value);
             }
         } catch (IOException e) {
             System.err.println("Could not find a config.properties file");

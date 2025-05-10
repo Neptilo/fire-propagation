@@ -9,63 +9,70 @@ import java.util.List;
 
 public class FireSimulator {
 
+    public static final FireSimulator instance = new FireSimulator();
+
     // simulation parameters
-    private static int width = 20;
-    private static int height = 20;
-    private static List<IntPair> propagationDirections = List.of(
+    private int width = 20;
+    private int height = 20;
+    private List<IntPair> propagationDirections = List.of(
             new IntPair(-1, 0),
             new IntPair(1, 0),
             new IntPair(0, -1),
             new IntPair(0, 1));
-    private static int startingPointNum = 3;
-    private static double propagationFactor = 0.5;
-    private static int timeStepMs = 1000;
+    private int startingPointNum = 3;
+    private double propagationFactor = 0.5;
+    private int timeStepMs = 1000;
 
     // simulation state variables
-    private static ArrayList<ArrayList<TileState>> map;
-    private static LinkedList<IntPair> fireList;
+    private ArrayList<ArrayList<TileState>> map;
+    private LinkedList<IntPair> fireList;
 
-    private static IFireObserver observer;
+    private IFireObserver observer;
+
+    private ScheduledExecutorService scheduler;
+
+    private FireSimulator() {
+    }
 
     /* getters */
 
-    public static int getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public static int getHeight() {
+    public int getHeight() {
         return height;
     }
 
     /* setters */
 
-    public static void setWidth(int width) {
-        FireSimulator.width = width;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
-    public static void setHeight(int height) {
-        FireSimulator.height = height;
+    public void setHeight(int height) {
+        this.height = height;
     }
 
-    public static void setStartingPointNum(int startingPointNum) {
-        FireSimulator.startingPointNum = startingPointNum;
+    public void setStartingPointNum(int startingPointNum) {
+        this.startingPointNum = startingPointNum;
     }
 
-    public static void setPropagationFactor(double propagationFactor) {
-        FireSimulator.propagationFactor = propagationFactor;
+    public void setPropagationFactor(double propagationFactor) {
+        this.propagationFactor = propagationFactor;
     }
 
-    public static void setTimeStepMs(int timeStepMs) {
-        FireSimulator.timeStepMs = timeStepMs;
+    public void setTimeStepMs(int timeStepMs) {
+        this.timeStepMs = timeStepMs;
     }
 
-    public static void setObserver(IFireObserver observer) {
-        FireSimulator.observer = observer;
+    public void setObserver(IFireObserver observer) {
+        this.observer = observer;
     }
 
     /* simulation logic */
 
-    public static void start() {
+    public void start() {
         // initialize simulation state variables
         map = new ArrayList<>(height);
         for (int i = 0; i < height; i++) {
@@ -98,7 +105,7 @@ public class FireSimulator {
             observer.onFireAdded(fireList);
 
         // periodically increase FileServer.counter every second
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler = Executors.newScheduledThreadPool(1);
         scheduler.scheduleAtFixedRate(() -> {
             if (fireList.size() == 0) {
                 scheduler.shutdown();
@@ -109,7 +116,7 @@ public class FireSimulator {
         System.out.println("Simulation started");
     }
 
-    public static void propagate() {
+    public void propagate() {
         LinkedList<IntPair> newFireList = new LinkedList<>();
         for (IntPair tilePos : fireList) {
             // set new tiles on fire
