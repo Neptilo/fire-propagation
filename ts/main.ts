@@ -1,4 +1,5 @@
 const MARGIN = 16;
+const REFRESH_RATE = 200;
 
 const startButton = document.getElementById('start-button') as HTMLButtonElement;
 
@@ -87,8 +88,8 @@ onresize = layout;
 
 if (startButton) {
     startButton.onclick = () => {
-        fetch("/api/start"); // start simulation
-        setInterval(updateMap, 200); // schedule periodical data updates
+        fetch("/api/start", { method: 'POST' }); // start simulation
+        setInterval(updateMap, REFRESH_RATE); // schedule periodical data updates
         startButton.disabled = true;
     }
 }
