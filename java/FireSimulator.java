@@ -149,4 +149,11 @@ public class FireSimulator {
         if (observer != null)
             observer.onFireAdded(fireList);
     }
+
+    public void abort() {
+        if (scheduler != null && !scheduler.isShutdown()) {
+            scheduler.shutdown();
+            System.out.println("Simulation aborted");
+        }
+    }
 }
