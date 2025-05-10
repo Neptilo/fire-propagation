@@ -110,8 +110,14 @@ public class FireSimulator {
 
         // periodically increase FileServer.counter every second
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(
-                () -> propagate(), 0, timeStepMs, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(() -> {
+            if (fireList.size() == 0) {
+                scheduler.shutdown();
+                System.out.println("Simulation ended");
+            } else
+                propagate();
+        }, 0, timeStepMs, TimeUnit.MILLISECONDS);
+        System.out.println("Simulation started");
     }
 
     public static void propagate() {
