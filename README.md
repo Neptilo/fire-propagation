@@ -14,8 +14,7 @@ It simulates a forest fire propagation as a cell automaton.
 replacing `%PATH_TO_FX%` with the path where you extracted the JavaFX SDK, or
 setting that variable beforehand (`$PATH_TO_FX` on Unix) in your environment
 variables.
-* Create the folder for the web content: `mkdir ../out/web`
-* Copy the resources: `cp -r src/main/resources/* ../out/web`
+* Copy the resources: `cp -r src/main/resources/* ../out`
 
 ## TypeScript/JavaScript frontend
 

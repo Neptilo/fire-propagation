@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static void main(String[] args) {
+        ConfigLoader.load();
         FireSimulator.start();
 
         launch(args);
@@ -31,7 +32,7 @@ public class Main extends Application {
         webView.getEngine().load("http://localhost:8080/index.html");
 
         VBox vBox = new VBox(webView);
-        Scene scene = new Scene(vBox, 960, 600);
+        Scene scene = new Scene(vBox, 600, 600);
 
         primaryStage.setScene(scene);
         primaryStage.show();

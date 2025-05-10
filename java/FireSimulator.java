@@ -10,8 +10,8 @@ import java.util.List;
 public class FireSimulator {
 
     // simulation parameters
-    private static int width = 200;
-    private static int height = 200;
+    private static int width = 20;
+    private static int height = 20;
     private static List<IntPair> propagationDirections = List.of(
             new IntPair(-1, 0),
             new IntPair(1, 0),
@@ -19,7 +19,7 @@ public class FireSimulator {
             new IntPair(0, 1));
     private static int startingPointNum = 3;
     private static double propagationFactor = 0.5;
-    private static int timeStepMs = 200;
+    private static int timeStepMs = 1000;
 
     // simulation state variables
     private static ArrayList<ArrayList<TileState>> map;
@@ -29,6 +29,8 @@ public class FireSimulator {
     private static LinkedList<IntPair> firePendingList;
     private static LinkedList<IntPair> ashPendingList;
 
+    /* getters */
+
     public static int getWidth() {
         return width;
     }
@@ -36,6 +38,30 @@ public class FireSimulator {
     public static int getHeight() {
         return height;
     }
+
+    /* setters */
+
+    public static void setWidth(int width) {
+        FireSimulator.width = width;
+    }
+
+    public static void setHeight(int height) {
+        FireSimulator.height = height;
+    }
+
+    public static void setStartingPointNum(int startingPointNum) {
+        FireSimulator.startingPointNum = startingPointNum;
+    }
+
+    public static void setPropagationFactor(double propagationFactor) {
+        FireSimulator.propagationFactor = propagationFactor;
+    }
+
+    public static void setTimeStepMs(int timeStepMs) {
+        FireSimulator.timeStepMs = timeStepMs;
+    }
+
+    /* other methods */
 
     public static LinkedList<IntPair> popFireList() {
         LinkedList<IntPair> res = firePendingList;
@@ -50,6 +76,7 @@ public class FireSimulator {
     }
 
     public static void start() {
+        // initialize simulation state variables
         map = new ArrayList<>(height);
         for (int i = 0; i < height; i++) {
             map.add(new ArrayList<>(Collections.nCopies(width, TileState.TREE)));
