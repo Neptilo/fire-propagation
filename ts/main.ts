@@ -1,6 +1,4 @@
-const tableElem = document.getElementsByTagName('table')[0];
-
-const margin = 32;
+const MARGIN = 16;
 
 // must match the definition in the backend, in the same order
 enum Tile { Tree, Fire, Ash };
@@ -44,19 +42,11 @@ async function updateMap() {
         vm.map[tile[0]][tile[1]] = Tile.Ash;
 }
 
-// initialize data
-onload = async () => {
-    const res = await fetch("/api/map-size");
-    const initialData = await res.json();
-    vm.width = initialData.width;
-    vm.height = initialData.height;
-    vm.map = Array.from(
-        { length: vm.height },
-        () => Array(vm.width).fill(Tile.Tree));
-
+function resize() {
     // fit table into available space, keeping tiles square
-    const maxWidth = window.innerWidth - 2 * margin;
-    const maxHeight = window.innerHeight - 2 * margin;
+    const tableElem = document.getElementsByTagName('table')[0];
+    const maxWidth = window.innerWidth - 2 * MARGIN;
+    const maxHeight = window.innerHeight - 2 * MARGIN;
     const mapAspectRatio = vm.width / vm.height;
     const spaceAspectRatio = maxWidth / maxHeight;
     if (mapAspectRatio <= spaceAspectRatio) {
@@ -68,7 +58,23 @@ onload = async () => {
         tableElem.style.width = maxWidth + 'px';
         tableElem.style.height = maxWidth / mapAspectRatio + 'px';
     }
+    document.body.style.margin = MARGIN + 'px';
+}
+
+// initialize data
+onload = async () => {
+    const res = await fetch("/api/map-size");
+    const initialData = await res.json();
+    vm.width = initialData.width;
+    vm.height = initialData.height;
+    vm.map = Array.from(
+        { length: vm.height },
+        () => Array(vm.width).fill(Tile.Tree));
+
+    resize();
 
     updateMap(); // update map data immediately
     setInterval(updateMap, 200); // schedule periodical data updates
 }
+
+onresize = resize;
