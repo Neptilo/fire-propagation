@@ -9,8 +9,10 @@ import java.util.StringJoiner;
 
 public class FileServer {
 
+    private static HttpServer server;
+
     public static void start(int port, Path rootDir) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+        server = HttpServer.create(new InetSocketAddress(port), 0);
 
         server.createContext("/", exchange -> {
             String path = exchange.getRequestURI().getPath();
@@ -77,6 +79,10 @@ public class FileServer {
         server.setExecutor(null); // default executor
         server.start();
         System.out.println("Server running on http://localhost:" + port);
+    }
+
+    public static void stop() {
+        server.stop(0);
     }
 
     private static String stringifyIntPairList(LinkedList<IntPair> list) {
