@@ -9,3 +9,7 @@
 .ash {
     background-color: gray;
 }
+
+table {
+    border-spacing: 0;
+}

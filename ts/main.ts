@@ -1,8 +1,6 @@
 const tableElem = document.getElementsByTagName('table')[0];
 
 const margin = 32;
-tableElem.style.width = window.innerWidth - 2 * margin + 'px';
-tableElem.style.height = window.innerHeight - 2 * margin + 'px';
 
 // must match the definition in the backend, in the same order
 enum Tile { Tree, Fire, Ash };
@@ -55,8 +53,22 @@ onload = async () => {
     vm.map = Array.from(
         { length: vm.height },
         () => Array(vm.width).fill(Tile.Tree));
-    updateMap();
 
-    // periodically update data
-    setInterval(updateMap, 200);
+    // fit table into available space, keeping tiles square
+    const maxWidth = window.innerWidth - 2 * margin;
+    const maxHeight = window.innerHeight - 2 * margin;
+    const mapAspectRatio = vm.width / vm.height;
+    const spaceAspectRatio = maxWidth / maxHeight;
+    if (mapAspectRatio <= spaceAspectRatio) {
+        // fill height
+        tableElem.style.height = maxHeight + 'px';
+        tableElem.style.width = maxHeight * mapAspectRatio + 'px';
+    } else {
+        // fill width
+        tableElem.style.width = maxWidth + 'px';
+        tableElem.style.height = maxWidth / mapAspectRatio + 'px';
+    }
+
+    updateMap(); // update map data immediately
+    setInterval(updateMap, 200); // schedule periodical data updates
 }
