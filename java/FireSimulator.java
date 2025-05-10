@@ -25,9 +25,7 @@ public class FireSimulator {
     private static ArrayList<ArrayList<TileState>> map;
     private static LinkedList<IntPair> fireList;
 
-    // state diff buffers
-    private static LinkedList<IntPair> firePendingList;
-    private static LinkedList<IntPair> ashPendingList;
+    private static IFireObserver observer;
 
     /* getters */
 
@@ -61,19 +59,11 @@ public class FireSimulator {
         FireSimulator.timeStepMs = timeStepMs;
     }
 
-    /* other methods */
-
-    public static LinkedList<IntPair> popFireList() {
-        LinkedList<IntPair> res = firePendingList;
-        firePendingList = new LinkedList<>();
-        return res;
+    public static void setObserver(IFireObserver observer) {
+        FireSimulator.observer = observer;
     }
 
-    public static LinkedList<IntPair> popAshList() {
-        LinkedList<IntPair> res = ashPendingList;
-        ashPendingList = new LinkedList<>();
-        return res;
-    }
+    /* simulation logic */
 
     public static void start() {
         // initialize simulation state variables
@@ -82,8 +72,6 @@ public class FireSimulator {
             map.add(new ArrayList<>(Collections.nCopies(width, TileState.TREE)));
         }
         fireList = new LinkedList<>();
-        firePendingList = new LinkedList<>();
-        ashPendingList = new LinkedList<>();
 
         // start a fire:
         // randomly choose starting positions until we reach the desired number
@@ -105,8 +93,9 @@ public class FireSimulator {
             IntPair startPos = new IntPair(startRow, startCol);
             map.get(startRow).set(startCol, TileState.FIRE);
             fireList.add(startPos);
-            firePendingList.add(startPos);
         }
+        if (observer != null)
+            observer.onFireAdded(fireList);
 
         // periodically increase FileServer.counter every second
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -147,8 +136,10 @@ public class FireSimulator {
         }
 
         // update data state lists
-        ashPendingList.addAll(fireList);
+        if (observer != null)
+            observer.onAshAdded(fireList);
         fireList = newFireList;
-        firePendingList.addAll(fireList);
+        if (observer != null)
+            observer.onFireAdded(fireList);
     }
 }

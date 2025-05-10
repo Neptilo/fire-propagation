@@ -60,14 +60,17 @@ public class FileServer {
             }
         });
         
+        FireChangeCache cache = new FireChangeCache();
+
         server.createContext("/api/start", exchange -> {
             FireSimulator.start();
+            FireSimulator.setObserver(cache);
         });
 
         server.createContext("/api/diff", exchange -> {
             String response = "{" +
-                "\"fire\": " + stringifyIntPairList(FireSimulator.popFireList()) +
-                ",\"ash\": " + stringifyIntPairList(FireSimulator.popAshList()) +
+                "\"fire\": " + stringifyIntPairList(cache.popFireList()) +
+                ",\"ash\": " + stringifyIntPairList(cache.popAshList()) +
                 "}";
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, response.length());
