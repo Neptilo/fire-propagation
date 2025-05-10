@@ -1,5 +1,7 @@
 const MARGIN = 16;
 
+const startButton = document.getElementById('start-button');
+
 // must match the definition in the backend, in the same order
 enum Tile { Tree, Fire, Ash };
 
@@ -42,11 +44,16 @@ async function updateMap() {
         vm.map[tile[0]][tile[1]] = Tile.Ash;
 }
 
-function resize() {
+function layout() {
     // fit table into available space, keeping tiles square
     const tableElem = document.getElementsByTagName('table')[0];
     const maxWidth = window.innerWidth - 2 * MARGIN;
-    const maxHeight = window.innerHeight - 2 * MARGIN;
+    let buttonHeight = 0;
+    if (startButton) {
+        const marginBottom = parseFloat(getComputedStyle(startButton).marginBottom);
+        buttonHeight = startButton.offsetHeight + marginBottom;
+    }
+    const maxHeight = window.innerHeight - 2 * MARGIN - buttonHeight;
     const mapAspectRatio = vm.width / vm.height;
     const spaceAspectRatio = maxWidth / maxHeight;
     if (mapAspectRatio <= spaceAspectRatio) {
@@ -71,10 +78,16 @@ onload = async () => {
         { length: vm.height },
         () => Array(vm.width).fill(Tile.Tree));
 
-    resize();
+    layout();
 
     updateMap(); // update map data immediately
-    setInterval(updateMap, 200); // schedule periodical data updates
 }
 
-onresize = resize;
+onresize = layout;
+
+if (startButton) {
+    startButton.onclick = () => {
+        fetch("/api/start"); // start simulation
+        setInterval(updateMap, 200); // schedule periodical data updates
+    }
+}

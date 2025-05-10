@@ -14,3 +14,8 @@ table {
     border-spacing: 0;
     margin: auto;
 }
+
+#start-button {
+    margin: 12px auto;
+    display: block;
+}

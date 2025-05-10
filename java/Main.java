@@ -10,7 +10,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         ConfigLoader.load();
-        FireSimulator.start();
 
         launch(args);
     }

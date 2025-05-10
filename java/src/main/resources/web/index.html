@@ -8,6 +8,7 @@
 </head>
 
 <body>
+  <button id="start-button">Start</button>
   <table id="app">
     <tr v-for="(row, rowIndex) in map" :key="rowIndex">
       <td v-for="(tile, colIndex) in row" :key="colIndex" :class="getTileName(tile)">

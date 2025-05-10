@@ -57,6 +57,10 @@ public class FileServer {
                 os.write(response.getBytes());
             }
         });
+        
+        server.createContext("/api/start", exchange -> {
+            FireSimulator.start();
+        });
 
         server.createContext("/api/diff", exchange -> {
             String response = "{" +
