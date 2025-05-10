@@ -1,6 +1,6 @@
 const MARGIN = 16;
 
-const startButton = document.getElementById('start-button');
+const startButton = document.getElementById('start-button') as HTMLButtonElement;
 
 // must match the definition in the backend, in the same order
 enum Tile { Tree, Fire, Ash };
@@ -89,5 +89,6 @@ if (startButton) {
     startButton.onclick = () => {
         fetch("/api/start"); // start simulation
         setInterval(updateMap, 200); // schedule periodical data updates
+        startButton.disabled = true;
     }
 }
