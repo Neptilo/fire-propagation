@@ -27,3 +27,19 @@ variables.
 In a console, go to the `out` folder and run:
  `java --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.web Main`,
 replacing `%PATH_TO_FX%` like previously.
+
+## Simulation configuration
+
+The simulation can use a `config.properties` file, located in the class path,
+to override some simulation parameters. You can edit it manually before
+running the simulation.
+
+Each line defines one property using the simple syntax:
+`propertyName=propertyValue`
+
+Here are the supported properties (all optional):
+* `width`: integer, greater than 0, defining the number of columns of the grid.
+* `height`: integer, greater than 0, defining the number of rows of the grid.
+* `startingPointNum`: integer, between 1 and `width * height`, defining the number of initial fire cells.
+* `propagationFactor`: double, between 0 and 1, defining the probability of a tile to be lit up by an adjacent fire, most interesting around 0.5.
+* `timeStepMs`: integer, greater than 0, defining the duration of a time increment of the simulation, in milliseconds.
