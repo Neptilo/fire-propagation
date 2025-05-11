@@ -2,7 +2,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * A static class that loads simulation properties from a config.properties file
+ */
 public class ConfigLoader {
+    /**
+     * Load the properties from a config.properties file located in the class
+     * path. If some of the properties have invalid syntax, the subsequent
+     * properties are ignored and they keep their default values.
+     * If a property value is not within its allowed bounds, its default value
+     * is kept.
+     */
     public static void load() {
         FireSimulator simulator = FireSimulator.instance;
         try (InputStream input = simulator.getClass().getResourceAsStream(
@@ -65,6 +75,14 @@ public class ConfigLoader {
         }
     }
 
+    /**
+     * Check if an integer property value is above its allowed minimum
+     * and if not, report it
+     * @param name The name of the property
+     * @param value The value of the property
+     * @param bound The allowed minimum
+     * @return Whether the condition was respected
+     */
     private static boolean validateMinInt(
             String name, int value, int bound) {
         if (value >= bound)
@@ -75,6 +93,14 @@ public class ConfigLoader {
         return false;
     }
 
+    /**
+     * Check if an integer property value is below its allowed maximum
+     * and if not, report it
+     * @param name The name of the property
+     * @param value The value of the property
+     * @param bound The allowed maximum
+     * @return Whether the condition was respected
+     */
     private static boolean validateMaxInt(
             String name, int value, int bound) {
         if (value <= bound)
@@ -85,6 +111,14 @@ public class ConfigLoader {
         return false;
     }
 
+    /**
+     * Check if a double property value is above its allowed minimum
+     * and if not, report it
+     * @param name The name of the property
+     * @param value The value of the property
+     * @param bound The allowed minimum
+     * @return Whether the condition was respected
+     */
     private static boolean validateMinDouble(
             String name, double value, double bound) {
         if (value >= bound)
@@ -95,6 +129,14 @@ public class ConfigLoader {
         return false;
     }
 
+    /**
+     * Check if a double property value is below its allowed maximum
+     * and if not, report it
+     * @param name The name of the property
+     * @param value The value of the property
+     * @param bound The allowed maximum
+     * @return Whether the condition was respected
+     */
     private static boolean validateMaxDouble(
             String name, double value, double bound) {
         if (value <= bound)

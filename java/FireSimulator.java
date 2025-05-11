@@ -7,28 +7,47 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Singleton class handling the fire simulation data and logic
+ */
 public class FireSimulator {
 
     public static final FireSimulator instance = new FireSimulator();
 
-    // simulation parameters
+    /* simulation parameters */
+
+    // number of columns of the simulation grid
     private int width = 20;
+
+    // number of rows of the simulation grid
     private int height = 20;
+
+    // list of translation vectors of the possible directions of propagation
     private List<IntPair> propagationDirections = List.of(
             new IntPair(-1, 0),
             new IntPair(1, 0),
             new IntPair(0, -1),
             new IntPair(0, 1));
+
+    // number of tiles that are initially on fire
     private int startingPointNum = 3;
+
+    // probabity of progression from a fire cell to an adjacent tree cell
     private double propagationFactor = 0.5;
+
+    // duration of a time increment in the simulation, in milliseconds
     private int timeStepMs = 1000;
+
+    /* end simulation parameters */
 
     // simulation state variables
     private ArrayList<ArrayList<TileState>> map;
     private LinkedList<IntPair> fireList;
 
+    // reference to an object that will receive updates when cells change state
     private IFireObserver observer;
 
+    // scheduler that will update the simulation at each time increment
     private ScheduledExecutorService scheduler;
 
     private FireSimulator() {
@@ -72,6 +91,11 @@ public class FireSimulator {
 
     /* simulation logic */
 
+    /**
+     * Start the simulation with the current parameters:
+     * Randomly choose the desired number of starting positions
+     * and start the scheduler.
+     */
     public void start() {
         // initialize simulation state variables
         map = new ArrayList<>(height);
@@ -116,6 +140,10 @@ public class FireSimulator {
         System.out.println("Simulation started");
     }
 
+    /**
+     * Apply the changes that should occur in the simulation from one time
+     * increment to the next.
+     */
     public void propagate() {
         LinkedList<IntPair> newFireList = new LinkedList<>();
         for (IntPair tilePos : fireList) {
@@ -150,6 +178,9 @@ public class FireSimulator {
             observer.onFireAdded(fireList);
     }
 
+    /**
+     * Abort the scheduler if it is still running
+     */
     public void abort() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();

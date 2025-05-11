@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static void main(String[] args) {
-        ConfigLoader.load();
+        ConfigLoader.load(); // load simulation parameters from config file
 
         launch(args);
     }

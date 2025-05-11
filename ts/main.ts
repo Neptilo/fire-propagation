@@ -41,6 +41,8 @@ const vm = app.mount('#app') as VueInstance<VueData>;
 
 /* layout helpers */
 
+// Make the table fit within the available space while keeping the tiles square
+// and define body margins
 function layout() {
     const tableElem = document.querySelector('table')!;
     const maxWidth = window.innerWidth - 2 * MARGIN;
@@ -61,6 +63,7 @@ function layout() {
     document.body.style.margin = `${MARGIN}px`;
 }
 
+// Calculate the additional vertical space taken by the start button
 function getButtonHeight(): number {
     if (!startButton) return 0;
     const marginBottom = parseFloat(getComputedStyle(startButton).marginBottom);
@@ -69,6 +72,8 @@ function getButtonHeight(): number {
 
 /* data helpers */
 
+// Get the initial simulation data (= map size)
+// and use it to initialize the Vue data
 async function fetchInitialData() {
     const res = await fetch("/api/map-size");
     const initialData = await res.json();
@@ -78,6 +83,7 @@ async function fetchInitialData() {
         Array(vm.width).fill(Tile.Tree));
 }
 
+// Get the cell changes since last update and use it to update Vue's map data
 async function updateMap() {
     const res = await fetch("/api/diff");
     const diffData = await res.json();
@@ -89,10 +95,10 @@ async function updateMap() {
 
 /* initialization */
 
+// Get the initial data and use it to layout the view
 async function initApp() {
     await fetchInitialData();
     layout();
-    updateMap(); // update map data immediately
 }
 
 /* event binding */
