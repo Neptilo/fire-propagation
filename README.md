@@ -2,6 +2,8 @@ This program is my proposed solution to an exercise given by Ciril Group.
 
 It simulates a forest fire propagation as a cell automaton.
 
+![simulation illustration](illu.png "Example of a simulation")
+
 # Installation
 
 ## Java backend
